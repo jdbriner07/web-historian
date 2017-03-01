@@ -9,11 +9,15 @@ var _ = require('underscore');
  * customize it in any way you wish.
  */
 
+
+
+
 exports.paths = {
   siteAssets: path.join(__dirname, '../web/public'),
   archivedSites: path.join(__dirname, '../archives/sites'),
   list: path.join(__dirname, '../archives/sites.txt')
 };
+
 
 // Used for stubbing paths for tests, do not modify
 exports.initialize = function(pathsObj) {
@@ -26,12 +30,26 @@ exports.initialize = function(pathsObj) {
 // modularize your code. Keep it clean!
 
 exports.readListOfUrls = function(callback) {
+  fs.readFile(exports.paths.list, 'utf8', function(err, data) {
+    if (err) {
+      console.log('readList', err);
+      return;
+    }
+    callback(data.split('\n'));
+  });  
 };
 
 exports.isUrlInList = function(url, callback) {
+  exports.readListOfUrls(function(data) {
+    callback(data.indexOf(url) > -1);
+  });
+
 };
 
 exports.addUrlToList = function(url, callback) {
+  //
+    //
+      //
 };
 
 exports.isUrlArchived = function(url, callback) {
@@ -39,3 +57,6 @@ exports.isUrlArchived = function(url, callback) {
 
 exports.downloadUrls = function(urls) {
 };
+
+
+
