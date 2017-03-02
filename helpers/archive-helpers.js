@@ -77,7 +77,6 @@ exports.downloadUrls = function(urls) {
       res.on('end', () => {
         try {
           var parsedData = rawData.toString();
-          console.log(parsedData);
           fs.writeFile(exports.paths.archivedSites + '/' + url, parsedData, 'utf8');
 
         } catch (e) {
@@ -88,5 +87,9 @@ exports.downloadUrls = function(urls) {
       console.log(`Got error: ${e.message}`);
     });
   });
+};
+
+exports.clearList = function () {
+  fs.writeFile(exports.paths.list, '', 'utf8');
 };
 
