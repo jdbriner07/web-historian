@@ -13,8 +13,11 @@ var CronJob = require('cron').CronJob;
 var archive = require('../helpers/archive-helpers');
 
 
-var job = new CronJob('* */1 * * * *', function() {
+module.exports = new CronJob('*/10 * * * * *', function() {
   archive.readListOfUrls(archive.downloadUrls);
-}, //archive helper funciton to clear sites.txt
-  true, 'America/Los_Angeles'
+  // setTimeout(archive.clearList, 0);
+}, function() {
+},
+  false, 'America/Los_Angeles'
 );
+

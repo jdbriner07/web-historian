@@ -6,6 +6,8 @@ var path = require('path');
 var supertest = require('supertest');
 var initialize = require('../web/initialize.js');
 
+
+
 initialize(path.join(__dirname, '/testdata'));
 
 archive.initialize({
@@ -52,8 +54,11 @@ describe('server', function() {
       });
     });
 
+
+
     describe('POST', function () {
       it('should append submitted sites to \'sites.txt\'', function(done) {
+        // due to the way code was written, only passes with clear initialized files
         var url = 'www.example.com';
 
         // Reset the test file and process request

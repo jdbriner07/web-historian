@@ -20,7 +20,6 @@ exports.serveAssets = function(res, asset, callback) {
       res.end(JSON.stringify(err));
       return; 
     }
-    res.writeHead(200);
     res.end(data);
     callback && callback();
     return;

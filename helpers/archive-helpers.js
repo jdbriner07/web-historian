@@ -68,6 +68,7 @@ exports.isUrlArchived = function(url, cb) {
 };
 
 exports.downloadUrls = function(urls) {
+  exports.clearList();
   urls.forEach(url => {
     http.get(`http://${url}`, (res) => {
       var contentType = res.headers['content-type'];
