@@ -23,3 +23,9 @@ exports.handleRequest = function (req, res) {
   }
 
 };
+
+//callback = isUrlInList(url, function(exists) {
+//  if exists ? serve the file, otherwise addUrltoList(url, serve loading.html)
+//})
+
+//empty out file after performing download urls

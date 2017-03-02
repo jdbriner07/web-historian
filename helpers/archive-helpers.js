@@ -2,6 +2,15 @@ var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
 
+require("jsdom").env("", function(err, window) {
+  if (err) {
+    console.error(err);
+    return;
+  }
+
+  var $ = require("jquery")(window);
+});
+
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
  * Consider using the `paths` object below to store frequently used file paths. This way,
@@ -9,8 +18,7 @@ var _ = require('underscore');
  * customize it in any way you wish.
  */
 
-
-
+console.log(window);
 
 exports.paths = {
   siteAssets: path.join(__dirname, '../web/public'),
@@ -47,16 +55,45 @@ exports.isUrlInList = function(url, callback) {
 };
 
 exports.addUrlToList = function(url, callback) {
-  //
-    //
-      //
+  //(isUrlInList)
+    //if so , return
+    //if isnt  append it to the file
+  exports.isUrlInList(url, function(exists) {
+    if (exists) {
+      callback();
+      return;
+    } else {
+      fs.appendFile(exports.paths.list, url + '\n', 'utf8', callback);
+      return;
+    }
+  });
 };
 
-exports.isUrlArchived = function(url, callback) {
+exports.isUrlArchived = function(url, cb) {
+  fs.readdir(exports.paths.archivedSites, function(err, urlArray) {
+    //make a check for err
+    cb(urlArray.indexOf(url) > -1);
+  });
 };
 
 exports.downloadUrls = function(urls) {
+
+  //iterate over urls
+    //preform an ajax request on each
+  urls.forEach(url => {
+    $.ajax({
+      type: 'GET',
+      url: url,
+      contentType: 'text/html',
+      success: function(data) {
+        //on success create a file for the html and add it to archived sites
+        fs.writeFile(exports.paths.archivedSites + '/' + url, data, 'utf8');
+      },
+      error: function(err) {
+        console.log(err);
+      }
+    });
+  });
+  //overwrite sites.txt
 };
-
-
 
