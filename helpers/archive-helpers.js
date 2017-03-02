@@ -1,7 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
-var $ = require('jquery');
+var http = require('http');
 
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
@@ -69,19 +69,24 @@ exports.isUrlArchived = function(url, cb) {
 
 exports.downloadUrls = function(urls) {
   urls.forEach(url => {
-    // $.ajax({
-    //   type: 'GET',
-    //   url: url,
-    //   contentType: 'text/html',
-    //   success: function(data) {
-    //     fs.writeFile(exports.paths.archivedSites + '/' + url, data, 'utf8');
-    fs.writeFile(exports.paths.archivedSites + '/' + url, '', 'utf8');
-    //   },
-    //   error: function(err) {
-    //     console.log(err);
-    //   }
-    // });
+    http.get(`http://${url}`, (res) => {
+      var contentType = res.headers['content-type'];
+      res.setEncoding('utf8');
+      var rawData = '';
+      res.on('data', (chunk) => rawData += chunk);
+      res.on('end', () => {
+        try {
+          var parsedData = rawData.toString();
+          console.log(parsedData);
+          fs.writeFile(exports.paths.archivedSites + '/' + url, parsedData, 'utf8');
+
+        } catch (e) {
+          console.log(e.message);
+        }
+      });
+    }).on('error', (e) => {
+      console.log(`Got error: ${e.message}`);
+    });
   });
-  //overwrite sites.txt
 };
 
