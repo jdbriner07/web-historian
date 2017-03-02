@@ -1,15 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
-
-require("jsdom").env("", function(err, window) {
-  if (err) {
-    console.error(err);
-    return;
-  }
-
-  var $ = require("jquery")(window);
-});
+var $ = require('jquery');
 
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
@@ -18,7 +10,6 @@ require("jsdom").env("", function(err, window) {
  * customize it in any way you wish.
  */
 
-console.log(window);
 
 exports.paths = {
   siteAssets: path.join(__dirname, '../web/public'),
@@ -60,7 +51,7 @@ exports.addUrlToList = function(url, callback) {
     //if isnt  append it to the file
   exports.isUrlInList(url, function(exists) {
     if (exists) {
-      callback();
+      cb && callback();
       return;
     } else {
       fs.appendFile(exports.paths.list, url + '\n', 'utf8', callback);
@@ -77,22 +68,19 @@ exports.isUrlArchived = function(url, cb) {
 };
 
 exports.downloadUrls = function(urls) {
-
-  //iterate over urls
-    //preform an ajax request on each
   urls.forEach(url => {
-    $.ajax({
-      type: 'GET',
-      url: url,
-      contentType: 'text/html',
-      success: function(data) {
-        //on success create a file for the html and add it to archived sites
-        fs.writeFile(exports.paths.archivedSites + '/' + url, data, 'utf8');
-      },
-      error: function(err) {
-        console.log(err);
-      }
-    });
+    // $.ajax({
+    //   type: 'GET',
+    //   url: url,
+    //   contentType: 'text/html',
+    //   success: function(data) {
+    //     fs.writeFile(exports.paths.archivedSites + '/' + url, data, 'utf8');
+    fs.writeFile(exports.paths.archivedSites + '/' + url, '', 'utf8');
+    //   },
+    //   error: function(err) {
+    //     console.log(err);
+    //   }
+    // });
   });
   //overwrite sites.txt
 };
